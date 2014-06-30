@@ -1,12 +1,12 @@
 using System.Text;
 using Abp.Utils.Extensions;
 
-namespace Abp.WebApi.Controllers.Dynamic.Scripting.jQuery.Actions
+namespace Abp.WebApi.Controllers.Dynamic.Scripting.Actions
 {
     internal class HttpGetActionScriptProxyGenerator : ActionScriptProxyGenerator
     {
-        private const string AjaxParametersTemplate =
-@"            url: abp.appPath + '{url}',
+        private const string AjaxParametersTemplate = 
+@"            url: '{url}',
             type: '{type}',
             data: {
 {getParams}

@@ -1,12 +1,12 @@
 using System.Text;
 using Abp.Utils.Extensions;
 
-namespace Abp.WebApi.Controllers.Dynamic.Scripting.jQuery.Actions
+namespace Abp.WebApi.Controllers.Dynamic.Scripting.Actions
 {
     internal class HttpDeleteActionScriptProxyGenerator : ActionScriptProxyGenerator
     {
         private const string AjaxParametersTemplate = 
-@"            url: abp.appPath + '{url}',
+@"            url: '{url}',
             type: '{type}'";
 
         public HttpDeleteActionScriptProxyGenerator(DynamicApiControllerInfo controllerInfo, DynamicApiActionInfo methodInfo)

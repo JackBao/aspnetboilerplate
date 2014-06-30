@@ -1,16 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Abp.Domain.Repositories.NHibernate;
-using Abp.Security.Roles;
-using NHibernate.Linq;
+﻿using Abp.Security.Roles;
 
 namespace Abp.Modules.Core.Data.Repositories.NHibernate
 {
-    public class AbpRoleRepository : NhRepositoryBase<AbpRole>, IAbpRoleRepository
+    public class AbpRoleRepository : RoleRepositoryBase<AbpRole>, IAbpRoleRepository
     {
-        public List<AbpRole> GetAllListWithPermissions()
-        {
-            return GetAll().Fetch(role => role.Permissions).ToList();
-        }       
+        
     }
 }

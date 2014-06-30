@@ -3,8 +3,6 @@ using Abp.Dependency;
 
 namespace Abp.Domain.Uow
 {
-    /// TODO@Halil: Use upper-level scope instead of starting new when available.
-
     /// <summary>
     /// This class is used to create a manual unit of work scope.  
     /// </summary>
@@ -19,7 +17,7 @@ namespace Abp.Domain.Uow
         /// Gets current <see cref="IUnitOfWork"/> instance.
         /// It gets the right instance that is related to current thread.
         /// </summary>
-        public static IUnitOfWork Current
+        public static IUnitOfWork CurrentUow
         {
             get { return _currentUow; }
             set { _currentUow = value; }
@@ -35,26 +33,17 @@ namespace Abp.Domain.Uow
         /// <summary>
         /// Create a new unit of work scope.
         /// </summary>
-        public UnitOfWorkScope() 
-            : this(true)
-        {
-            
-        }
-
-        /// <summary>
-        /// Create a new unit of work scope.
-        /// </summary>
-        public UnitOfWorkScope(bool isTransactional)
+        public UnitOfWorkScope()
         {
             _unitOfWorkWrapper = IocHelper.ResolveAsDisposable<IUnitOfWork>();
-            Current = _unitOfWorkWrapper.Object;
+            CurrentUow = _unitOfWorkWrapper.Object;
             try
             {
-                Current.Begin(isTransactional);
+                CurrentUow.BeginTransaction();
             }
             catch
             {
-                Current = null;
+                CurrentUow = null;
             }
         }
 
@@ -64,7 +53,7 @@ namespace Abp.Domain.Uow
         /// </summary>
         public void Commit()
         {
-            _unitOfWorkWrapper.Object.End();
+            _unitOfWorkWrapper.Object.Commit();
             _isCommited = true;
         }
         
@@ -72,11 +61,11 @@ namespace Abp.Domain.Uow
         {
             if (!_isCommited)
             {
-                try { _unitOfWorkWrapper.Object.Cancel(); }
+                try { _unitOfWorkWrapper.Object.Rollback(); }
                 catch { }
             }
 
-            Current = null;
+            CurrentUow = null;
             _unitOfWorkWrapper.Dispose();
         }
     }

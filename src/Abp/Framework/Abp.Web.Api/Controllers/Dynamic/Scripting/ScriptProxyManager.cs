@@ -2,72 +2,68 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Web;
-using Abp.Dependency;
-using Abp.WebApi.Controllers.Dynamic.Scripting.Angular;
-using Abp.WebApi.Controllers.Dynamic.Scripting.jQuery;
 
 namespace Abp.WebApi.Controllers.Dynamic.Scripting
 {
     //TODO@Halil: This class can be optimized.
-    public class ScriptProxyManager : ISingletonDependency
+    internal static class ScriptProxyManager
     {
-        private readonly IDictionary<string, ScriptInfo> CachedScripts;
+        private static readonly IDictionary<string, ScriptInfo> Scripts;
 
-        public ScriptProxyManager()
+        private static string _allServicesScript;
+
+        static ScriptProxyManager()
         {
-            CachedScripts = new Dictionary<string, ScriptInfo>();
+            Scripts = new Dictionary<string, ScriptInfo>();
         }
 
-        public string GetScript(string name, ProxyScriptType type)
+        public static string GetScript(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentException("name is null or empty!", "name");
             }
 
-            GenerateScriptsIfNeeded(type);
+            GenerateScriptsIfNeeded();
 
-            var cacheKey = type + "_" + name;
-            lock (CachedScripts)
+            lock (Scripts)
             {
-                if (!CachedScripts.ContainsKey(cacheKey))
+                if (!Scripts.ContainsKey(name))
                 {
-                    throw new HttpException(404, "There is no such a service: " + cacheKey);
+                    throw new HttpException(404, "There is no such a service: " + name);
                 }
 
-                return CachedScripts[cacheKey].Script;
+                return Scripts[name].Script;
             }
         }
 
-        public string GetAllScript(ProxyScriptType type)
+        public static string GetAllScript()
         {
-            lock (CachedScripts)
+            lock (Scripts)
             {
-                var cacheKey = type + "_all";
-                if (!CachedScripts.ContainsKey(cacheKey))
+                if (_allServicesScript == null)
                 {
                     var script = new StringBuilder();
 
                     var dynamicControllers = DynamicApiControllerManager.GetAll();
                     foreach (var dynamicController in dynamicControllers)
                     {
-                        var proxyGenerator = CreateProxyGenerator(type, dynamicController, false);
-                        script.AppendLine(proxyGenerator.Generate());
+                        script.AppendLine(new ControllerScriptProxyGenerator().GenerateFor(dynamicController, false));
                         script.AppendLine();
                     }
 
-                    CachedScripts[cacheKey] = new ScriptInfo(script.ToString());
+                    _allServicesScript = script.ToString();
                 }
 
-                return CachedScripts[cacheKey].Script;
+                return _allServicesScript;
             }
         }
 
-        public void GenerateScriptsIfNeeded(ProxyScriptType type)
+        public static void GenerateScriptsIfNeeded()
         {
-            lock (CachedScripts)
+            lock (Scripts)
             {
-                if (CachedScripts.Count > 0)
+                if (Scripts.Count > 0)
                 {
                     return;
                 }
@@ -75,33 +71,21 @@ namespace Abp.WebApi.Controllers.Dynamic.Scripting
                 var dynamicControllers = DynamicApiControllerManager.GetAll();
                 foreach (var dynamicController in dynamicControllers)
                 {
-                    var proxyGenerator = CreateProxyGenerator(type, dynamicController, true);
-                    var script = proxyGenerator.Generate();
-                    var cacheKey = type + "_" + dynamicController.ServiceName;
-                    CachedScripts[cacheKey] = new ScriptInfo(script);
+                    var script = new ControllerScriptProxyGenerator().GenerateFor(dynamicController);
+                    Scripts[dynamicController.ServiceName] = new ScriptInfo(dynamicController.ServiceName, script);
                 }
-            }
-        }
-
-        private static IScriptProxyGenerator CreateProxyGenerator(ProxyScriptType type, DynamicApiControllerInfo controllerInfo, bool amdModule)
-        {
-            switch (type)
-            {
-                case ProxyScriptType.JQuery:
-                    return new JQueryProxyGenerator(controllerInfo, amdModule);
-                case ProxyScriptType.Angular:
-                    return new AngularProxyGenerator(controllerInfo); //TODO: Angular!
-                default:
-                    throw new AbpException("Unknown ProxyScriptType: " + type);
             }
         }
 
         private class ScriptInfo
         {
+            public string ServiceName { get; private set; }
+
             public string Script { get; private set; }
 
-            public ScriptInfo(string script)
+            public ScriptInfo(string serviceName, string script)
             {
+                ServiceName = serviceName;
                 Script = script;
             }
         }

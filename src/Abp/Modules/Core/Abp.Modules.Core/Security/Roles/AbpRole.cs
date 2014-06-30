@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using Abp.Domain.Entities.Auditing;
 using Abp.Security.Permissions;
 using Microsoft.AspNet.Identity;
@@ -24,7 +23,6 @@ namespace Abp.Security.Roles
         /// <summary>
         /// List of permissions of this role.
         /// </summary>
-        [ForeignKey("RoleId")]
         public virtual IList<Permission> Permissions { get; set; }
     }
 }

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using Abp.Domain.Entities;
 using Abp.Domain.Uow;
-using Abp.Domain.Uow.NHibernate;
 using NHibernate;
 using NHibernate.Linq;
 
@@ -20,7 +19,7 @@ namespace Abp.Domain.Repositories.NHibernate
         /// <summary>
         /// Gets the NHibernate session object to perform database operations.
         /// </summary>
-        protected ISession Session { get { return ((NhUnitOfWork)UnitOfWorkScope.Current).Session; } }
+        protected ISession Session { get { return ((NhUnitOfWork)UnitOfWorkScope.CurrentUow).Session; } }
 
         public virtual IQueryable<TEntity> GetAll()
         {
@@ -70,7 +69,7 @@ namespace Abp.Domain.Repositories.NHibernate
             return Session.Get<TEntity>(key); //TODO: Implement ISoftDeleteEntity?
         }
 
-        public virtual TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate)
+        public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate)
         {
             return GetAll().FirstOrDefault(predicate);
         }

@@ -1,6 +1,6 @@
 using Abp.Web;
 
-namespace Abp.WebApi.Controllers.Dynamic.Scripting.jQuery.Actions
+namespace Abp.WebApi.Controllers.Dynamic.Scripting.Actions
 {
     internal static class HttpVerbExtensions
     {

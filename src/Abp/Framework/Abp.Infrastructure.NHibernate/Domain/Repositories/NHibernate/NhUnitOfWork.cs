@@ -1,11 +1,12 @@
+using Abp.Domain.Uow;
 using NHibernate;
 
-namespace Abp.Domain.Uow.NHibernate
+namespace Abp.Domain.Repositories.NHibernate
 {
     /// <summary>
     /// Implements Unit of work for NHibernate.
     /// </summary>
-    public class NhUnitOfWork : UnitOfWorkBase
+    public class NhUnitOfWork : IUnitOfWork
     {
         /// <summary>
         /// Gets Nhibernate session object to perform queries.
@@ -23,12 +24,6 @@ namespace Abp.Domain.Uow.NHibernate
         private ITransaction _transaction;
 
         /// <summary>
-        /// Is this object disposed?
-        /// Used to prevent multiple dispose.
-        /// </summary>
-        private bool _disposed;
-
-        /// <summary>
         /// Creates a new instance of NhUnitOfWork.
         /// </summary>
         /// <param name="sessionFactory"></param>
@@ -40,71 +35,35 @@ namespace Abp.Domain.Uow.NHibernate
         /// <summary>
         /// Opens database connection and begins transaction.
         /// </summary>
-        /// <param name="isTransactional"></param>
-        public override void Begin(bool isTransactional)
+        public void BeginTransaction()
         {
             Session = _sessionFactory.OpenSession();
-            if (isTransactional)
-            {
-                _transaction = Session.BeginTransaction();                
-            }
+            _transaction = Session.BeginTransaction();
         }
 
         /// <summary>
         /// Commits transaction and closes database connection.
         /// </summary>
-        public override void End()
+        public void Commit()
         {
             try
             {
-                Session.Flush();
-                if (_transaction != null)
-                {
-                    _transaction.Commit();                    
-                }
-
-                TriggerSuccessHandlers();
+                _transaction.Commit();
             }
             finally
             {
-                Dispose();
-            }
-        }
-
-        public override void Cancel()
-        {
-            try
-            {
-                if (_transaction != null)
-                {
-                    _transaction.Rollback();
-                }
-            }
-            finally 
-            {
-                Dispose();
+                Session.Dispose();                
             }
         }
 
         /// <summary>
         /// Rollbacks transaction and closes database connection.
         /// </summary>
-        public override void Dispose()
+        public void Rollback()
         {
-            if (_disposed)
-            {
-                return;
-            }
-
-            _disposed = true;
-
             try
             {
-                if (_transaction != null)
-                {
-                    _transaction.Dispose();
-                    _transaction = null;
-                }
+                _transaction.Rollback();
             }
             finally
             {

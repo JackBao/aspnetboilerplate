@@ -56,6 +56,7 @@ namespace Taskever.Users
             return new GetUserProfileOutput { User = profileUser.MapTo<UserDto>() };
         }
 
+        [UnitOfWork]
         public ChangeProfileImageOutput ChangeProfileImage(ChangeProfileImageInput input)
         {
             var currentUser = _userRepository.Get(AbpUser.CurrentUserId.Value); //TODO: test Load method
@@ -84,6 +85,7 @@ namespace Taskever.Users
             return new GetUserOutput(user.MapTo<UserDto>());
         }
 
+        [UnitOfWork]
         public void RegisterUser(RegisterUserInput registerUser)
         {
             var existingUser = _userRepository.FirstOrDefault(u => u.EmailAddress == registerUser.EmailAddress);
@@ -105,6 +107,7 @@ namespace Taskever.Users
             SendConfirmationEmail(userEntity);
         }
 
+        [UnitOfWork]
         public void ConfirmEmail(ConfirmEmailInput input)
         {
             var user = _userRepository.Get(input.UserId);
@@ -117,6 +120,7 @@ namespace Taskever.Users
             return new GetCurrentUserInfoOutput { User = _userRepository.Get(AbpUser.CurrentUserId.Value).MapTo<UserDto>() };
         }
 
+        [UnitOfWork]
         public void ChangePassword(ChangePasswordInput input)
         {
             var currentUser = _userRepository.Get(AbpUser.CurrentUserId.Value);
@@ -129,6 +133,7 @@ namespace Taskever.Users
             currentUser.Password = new PasswordHasher().HashPassword(currentUser.Password);
         }
 
+        [UnitOfWork]
         public void SendPasswordResetLink(SendPasswordResetLinkInput input)
         {
             var user = _userRepository.FirstOrDefault(u => u.EmailAddress == input.EmailAddress);
@@ -141,6 +146,7 @@ namespace Taskever.Users
             SendPasswordResetLinkEmail(user);
         }
 
+        [UnitOfWork]
         public void ResetPassword(ResetPasswordInput input)
         {
             var user = _userRepository.Get(input.UserId);

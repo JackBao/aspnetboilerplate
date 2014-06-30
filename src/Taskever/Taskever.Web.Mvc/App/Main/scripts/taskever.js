@@ -44,7 +44,6 @@
         Accepted: 2
     };
 
-    //TODO@Halil: Move this to a core library to be usable by all applications.
     //Used to keep session open TODO: Make this configurable and more-general
     taskever.keepSessionOpenTickDuration = 120000;
     var keepSessionOpen = function () {
@@ -53,7 +52,7 @@
         }
 
         $.ajax({
-            url: abp.appPath + 'Account/KeepSessionOpen',
+            url: '/Account/KeepSessionOpen',
             type: 'POST',
             dataType: 'json',
             success: function () {

@@ -40,13 +40,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Castle.Windsor.3.3.0\lib\net45\Castle.Windsor.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\..\..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\..\..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -62,17 +60,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Modules\Core\Data\Repositories\EntityFramework\CoreModuleDbContext.cs" />
-    <Compile Include="Modules\Core\Data\Repositories\EntityFramework\CoreModuleEfRepositoryBase.cs" />
     <Compile Include="Modules\Core\Data\Repositories\Interceptors\AuditInterceptor.cs" />
     <Compile Include="Modules\Core\Data\Repositories\EntityFramework\AbpRoleRepository.cs" />
     <Compile Include="Modules\Core\Data\Repositories\EntityFramework\AbpTenantRepository.cs" />
     <Compile Include="Modules\Core\Data\Repositories\EntityFramework\AbpUserRepository.cs" />
     <Compile Include="Modules\Core\Data\Repositories\EntityFramework\PermissionRepository.cs" />
+    <Compile Include="Modules\Core\Data\Repositories\EntityFramework\RoleRepositoryBase.cs" />
     <Compile Include="Modules\Core\Data\Repositories\EntityFramework\SettingRepository.cs" />
     <Compile Include="Modules\Core\Data\Repositories\EntityFramework\UserLoginRepositoryOfTUser.cs" />
+    <Compile Include="Modules\Core\Data\Repositories\EntityFramework\UserRepositoryBase.cs" />
     <Compile Include="Modules\Core\Data\Repositories\EntityFramework\UserRoleRepository.cs" />
-    <Compile Include="Modules\Core\Startup\AbpModulesCoreInfrastructureEntityFrameworkModule.cs" />
+    <Compile Include="Modules\Core\Startup\AbpModulesCoreInfrastructureNHibernateModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

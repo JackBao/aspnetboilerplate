@@ -7,11 +7,6 @@ namespace Abp.Web.Mvc.Controllers
     {
         public ActionResult Load(string viewUrl)
         {
-            if (!viewUrl.StartsWith("~"))
-            {
-                viewUrl = "~" + viewUrl;
-            }
-
             return View(viewUrl);
         }
     }

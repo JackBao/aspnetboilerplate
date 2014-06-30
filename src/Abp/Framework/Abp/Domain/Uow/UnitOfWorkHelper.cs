@@ -1,6 +1,5 @@
 using System;
 using System.Reflection;
-using Abp.Application.Services;
 using Abp.Domain.Repositories;
 
 namespace Abp.Domain.Uow
@@ -15,18 +14,18 @@ namespace Abp.Domain.Uow
         /// </summary>
         /// <param name="methodInfo">Method information</param>
         /// <returns>True if should perform unit of work</returns>
-        public static bool ShouldBeginUnitOfWork(MethodInfo methodInfo)
+        public static bool ShouldPerformUnitOfWork(MethodInfo methodInfo)
         {
-            return HasUnitOfWorkAttribute(methodInfo) || IsConventionalUowClass(methodInfo.DeclaringType);
+            return HasUnitOfWorkAttribute(methodInfo) || IsRepositoryClass(methodInfo.DeclaringType);
         }
 
         /// <summary>
-        /// Returns true if UOW must be used for given type as convention.
+        /// Returns true if given type is a repository class (implements IRepository).
         /// </summary>
         /// <param name="type">Type to check</param>
-        public static bool IsConventionalUowClass(Type type)
+        public static bool IsRepositoryClass(Type type)
         {
-            return typeof(IRepository).IsAssignableFrom(type) || typeof(IApplicationService).IsAssignableFrom(type);
+            return typeof(IRepository).IsAssignableFrom(type);
         }
 
         /// <summary>
@@ -36,21 +35,6 @@ namespace Abp.Domain.Uow
         public static bool HasUnitOfWorkAttribute(MemberInfo methodInfo)
         {
             return methodInfo.IsDefined(typeof(UnitOfWorkAttribute), true);
-        }
-
-        /// <summary>
-        /// Returns UnitOfWorkAttribute it exists.
-        /// </summary>
-        /// <param name="methodInfo">Method info to check</param>
-        public static UnitOfWorkAttribute GetUnitOfWorkAttributeOrNull(MemberInfo methodInfo)
-        {
-            var attrs = methodInfo.GetCustomAttributes(typeof (UnitOfWorkAttribute), false);
-            if (attrs.Length <= 0)
-            {
-                return null;
-            }
-
-            return (UnitOfWorkAttribute) attrs[0];
         }
     }
 }

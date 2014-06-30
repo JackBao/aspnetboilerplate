@@ -12,7 +12,6 @@ namespace Abp.Modules.Core.Entities.NHibernate.Mappings
             Map(x => x.UserId);
             Map(x => x.Name);
             Map(x => x.Value);
-
             this.MapAudited();
         }
     }

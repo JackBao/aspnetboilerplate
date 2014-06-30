@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using Abp;
+using Abp.Domain.Uow;
 using Abp.Events.Bus;
 using Abp.Events.Bus.Datas.Entities;
 using Abp.Mapping;
@@ -31,6 +33,7 @@ namespace Taskever.Tasks
             _taskPolicy = taskPolicy;
         }
 
+        [UnitOfWork]
         public GetTaskOutput GetTask(GetTaskInput input)
         {
             var currentUser = _userRepository.Load(AbpUser.CurrentUserId.Value);
@@ -58,6 +61,7 @@ namespace Taskever.Tasks
                        };
         }
 
+        [UnitOfWork]
         public virtual GetTasksOutput GetTasks(GetTasksInput input)
         {
             var query = CreateQueryForAssignedTasksOfUser(input.AssignedUserId);
@@ -77,6 +81,7 @@ namespace Taskever.Tasks
                        };
         }
 
+        [UnitOfWork]
         public GetTasksByImportanceOutput GetTasksByImportance(GetTasksByImportanceInput input)
         {
             var query = CreateQueryForAssignedTasksOfUser(input.AssignedUserId);
@@ -93,6 +98,7 @@ namespace Taskever.Tasks
             };
         }
 
+        [UnitOfWork]
         //[AbpAuthorize(TaskeverPermissions.CreateTask)]
         public virtual CreateTaskOutput CreateTask(CreateTaskInput input)
         {
@@ -127,6 +133,7 @@ namespace Taskever.Tasks
                        };
         }
 
+        [UnitOfWork]
         public void UpdateTask(UpdateTaskInput input)
         {
             var task = _taskRepository.FirstOrDefault(input.Id);
@@ -166,6 +173,7 @@ namespace Taskever.Tasks
             if (oldTaskState != TaskState.Completed && task.State == TaskState.Completed)
             {
                 _eventBus.Trigger(this, new TaskCompletedEventData(task));
+                //_notificationService.Notify(new CompletedTaskNotification(task));
             }
         }
 

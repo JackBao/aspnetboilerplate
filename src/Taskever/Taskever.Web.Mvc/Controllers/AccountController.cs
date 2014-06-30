@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.Mvc;
 using Abp.Modules.Core.Mvc.Models;
 using Abp.Security.IdentityFramework;
-using Abp.Security.Users;
 using Abp.UI;
 using Abp.Users.Dto;
 using Abp.Web.Mvc.Authorization;
@@ -14,6 +13,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using Recaptcha.Web;
 using Recaptcha.Web.Mvc;
+using Taskever.Security.Identity;
+using Taskever.Security.Users;
 using Taskever.Users;
 using Taskever.Web.Mvc.Models.Account;
 
@@ -23,7 +24,7 @@ namespace Taskever.Web.Mvc.Controllers
     {
         private readonly ITaskeverUserAppService _userAppService;
 
-        private readonly AbpUserManager _userManager;
+        private readonly TaskeverUserManager _userManager;
 
         private IAuthenticationManager AuthenticationManager
         {
@@ -33,26 +34,21 @@ namespace Taskever.Web.Mvc.Controllers
             }
         }
 
-        public AccountController(ITaskeverUserAppService userAppService, AbpUserManager userManager)
+        public AccountController(ITaskeverUserAppService userAppService, TaskeverUserManager userManager)
         {
             _userAppService = userAppService;
             _userManager = userManager;
         }
 
-        public virtual ActionResult Login(string returnUrl = "", string loginMessage = "")
+        public virtual ActionResult Login(string returnUrl = "/", string loginMessage = "")
         {
-            if (string.IsNullOrWhiteSpace(returnUrl))
-            {
-                returnUrl = Request.ApplicationPath;
-            }
-
             ViewBag.ReturnUrl = returnUrl;
             ViewBag.LoginMessage = loginMessage;
             return View();
         }
 
         [HttpPost]
-        public virtual async Task<JsonResult> Login(LoginModel loginModel, string returnUrl = "")
+        public virtual async Task<JsonResult> Login(LoginModel loginModel, string returnUrl = "/")
         {
             if (!ModelState.IsValid)
             {
@@ -67,15 +63,10 @@ namespace Taskever.Web.Mvc.Controllers
             
             await SignInAsync(user, loginModel.RememberMe);
 
-            if (string.IsNullOrWhiteSpace(returnUrl))
-            {
-                returnUrl = Request.ApplicationPath;
-            }
-
             return Json(new AbpMvcAjaxResponse { TargetUrl = returnUrl });
         }
 
-        private async Task SignInAsync(AbpUser user, bool isPersistent)
+        private async Task SignInAsync(TaskeverUser user, bool isPersistent)
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
             var identity = await _userManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);

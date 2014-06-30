@@ -64,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbpConst.cs" />
-    <Compile Include="Application\Services\IApplicationService.cs" />
     <Compile Include="Configuration\ISettingDefinitionManager.cs" />
     <Compile Include="Configuration\ISettingDefinitionProvider.cs" />
     <Compile Include="Configuration\ISettingManager.cs" />
@@ -86,10 +85,6 @@
     <Compile Include="Domain\Entities\Auditing\IModificationAudited.cs" />
     <Compile Include="Domain\Entities\EntityExtensions.cs" />
     <Compile Include="Domain\Entities\ISoftDeleteEntity.cs" />
-    <Compile Include="Domain\Uow\UnitOfWorkBase.cs" />
-    <Compile Include="Domain\Uow\UnitOfWorkInterceptor.cs" />
-    <Compile Include="Domain\Uow\UnitOfWorkRegistrer.cs" />
-    <Compile Include="Domain\Uow\UowEventBusExtensions.cs" />
     <Compile Include="Localization\LocalizableString.cs" />
     <Compile Include="Logging\LogHelper.cs" />
     <Compile Include="Runtime\Caching\ThreadSafeObjectCache.cs" />

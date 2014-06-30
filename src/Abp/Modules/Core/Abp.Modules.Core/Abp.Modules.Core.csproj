@@ -54,7 +54,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Microsoft.Bcl.Immutable.1.0.34\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
     </Reference>
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Caching" />
@@ -71,23 +70,25 @@
     <Compile Include="Configuration\SettingManager.cs" />
     <Compile Include="Security\IdentityFramework\AbpClaims.cs" />
     <Compile Include="Security\IdentityFramework\AbpRoleManagerBase.cs" />
-    <Compile Include="Security\IdentityFramework\AbpUserManager.cs" />
-    <Compile Include="Security\IdentityFramework\AbpRoleStore.cs" />
+    <Compile Include="Security\IdentityFramework\AbpUserManagerBase.cs" />
+    <Compile Include="Security\IdentityFramework\RoleStore.cs" />
     <Compile Include="Security\Permissions\IPermissionRepository.cs" />
     <Compile Include="Security\Roles\IAbpRoleRepository.cs" />
     <Compile Include="Security\Roles\Management\IRoleManager.cs" />
+    <Compile Include="Security\Roles\IRoleRepository.cs" />
     <Compile Include="Security\Roles\Management\IUserRoleManager.cs" />
     <Compile Include="Security\Roles\IUserRoleRepository.cs" />
     <Compile Include="Security\Roles\Management\RoleManager.cs" />
     <Compile Include="Security\Permissions\Permission.cs" />
     <Compile Include="Security\Roles\Management\UserRoleManager.cs" />
-    <Compile Include="Security\IdentityFramework\AbpUserStore.cs" />
+    <Compile Include="Security\IdentityFramework\UserStore.cs" />
     <Compile Include="Security\Tenants\AbpTenant.cs" />
     <Compile Include="Security\Tenants\IAbpTenantRepository.cs" />
     <Compile Include="Security\Users\IUserLoginRepository.cs" />
     <Compile Include="Security\Users\IAbpUserRepository.cs" />
     <Compile Include="Security\Users\UserLogin.cs" />
     <Compile Include="Utils\Helpers\RandomCodeGenerator.cs" />
+    <Compile Include="Security\Users\IUserRepository.cs" />
     <Compile Include="Security\Roles\UserRole.cs" />
     <Compile Include="Security\Roles\AbpRole.cs" />
     <Compile Include="Security\Users\AbpUser.cs" />

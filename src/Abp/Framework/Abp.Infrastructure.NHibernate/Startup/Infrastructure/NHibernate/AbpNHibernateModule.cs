@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using Abp.Dependency;
 using Abp.Domain.Repositories.NHibernate;
-using Abp.Domain.Uow;
 using Abp.Domain.Uow.NHibernate;
 using Abp.Modules;
 using FluentNHibernate.Cfg;
@@ -28,8 +27,8 @@ namespace Abp.Startup.Infrastructure.NHibernate
         public override void PreInitialize(IAbpInitializationContext initializationContext)
         {
             base.PreInitialize(initializationContext);
-
-            UnitOfWorkRegistrer.Initialize(initializationContext);
+            
+            NHibernateUnitOfWorkRegistrer.Initialize(initializationContext);
             Configuration = Fluently.Configure();
         }
 

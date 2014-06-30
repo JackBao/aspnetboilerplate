@@ -55,16 +55,10 @@
             }
         }
 
-        if (options.promise) { //Supports Q and jQuery.Deferred
-            if (options.promise.always) {
-                options.promise.always(function () {
-                    abp.ui.clearBusy(elm);
-                });
-            } else if (options.promise.finally) {
-                options.promise.finally(function () {
-                    abp.ui.clearBusy(elm);
-                });
-            }
+        if (options.promise) {
+            options.promise.always(function () {
+                abp.ui.clearBusy(elm);
+            });
         }
     };
 

@@ -16,18 +16,13 @@ namespace Abp.Domain.Entities.Mapping
         /// <param name="tableName">Table name</param>
         protected EntityMap(string tableName)
         {
-            if (string.IsNullOrWhiteSpace(tableName)) //TODO: Use code contracts?
+            if (string.IsNullOrWhiteSpace(tableName)) //TODO: Use code contracts or make a simple Helper?
             {
                 throw new ArgumentNullException("tableName");
             }
 
             Table(tableName);
             Id(x => x.Id);
-
-            if (typeof(ISoftDeleteEntity).IsAssignableFrom(typeof(TEntity)))
-            {
-                Where("IsDeleted = 0"); //TODO: Test with other DBMS then SQL Server
-            }
         }
     }
 }
